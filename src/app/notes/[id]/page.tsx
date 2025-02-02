@@ -14,19 +14,26 @@ async function getPostData(id: string) {
   return res.json();
 }
 
+// Fix the PageProps type to match Next.js expectations
 interface PageProps {
-  params: { id: string };
+  params: {
+    id: string;
+  };
 }
 
 export default function PostPage({ params }: PageProps) {
-  const [data, setData] = useState<{ title: string; content: string } | null>(null);
+  const [data, setData] = useState<{ title: string; content: string } | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getPostData(params.id)
-      .then((data) => setData(data))
-      .catch((error) => console.error("Error fetching post:", error))
-      .finally(() => setLoading(false));
+    if (params.id) {
+      getPostData(params.id)
+        .then((data) => setData(data))
+        .catch((error) => console.error("Error fetching post:", error))
+        .finally(() => setLoading(false));
+    }
   }, [params.id]);
 
   if (loading) return <p className="text-center">Loading Post...</p>;
