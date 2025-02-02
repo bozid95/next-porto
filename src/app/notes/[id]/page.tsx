@@ -13,7 +13,7 @@ type Post = {
   content: string;
 };
 
-async function getPostData(id: string): Promise<Post | null> {
+async function getPostData(id: number): Promise<Post | null> {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
   const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts/${id}?key=${API_KEY}`;
@@ -30,7 +30,7 @@ async function getPostData(id: string): Promise<Post | null> {
   }
 }
 
-export default function BlogDetailPage({ params }: { params: { id: string } }) {
+export default function BlogDetailPage({ params }: { params: { id: number } }) {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
