@@ -38,7 +38,7 @@ const FloatingDockMobile = ({
 }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className={cn("fixed bottom-4 right-4 md:hidden", className)}>
+    <div className={cn("fixed bottom-4 right-4 md:hidden " , className)}>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -58,7 +58,7 @@ const FloatingDockMobile = ({
                   },
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-                className="p-2 border border-purple-400 dark:border-purple-600 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow"
+                className="p-2 border border-purple-400 dark:border-purple-600 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow z-20"
               >
                 <Link
                   href={item.href}
@@ -95,7 +95,7 @@ const FloatingDockDesktop = ({
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "fixed bottom-4 left-1/2 -translate-x-1/2 hidden md:flex h-16 gap-4 items-end rounded-2xl bg-gray-50 dark:bg-neutral-900 px-4 pb-3 shadow-lg ",
+        "fixed bottom-4 left-1/2 -translate-x-1/2 hidden md:flex h-16 gap-4 items-end rounded-2xl bg-gray-50 dark:bg-neutral-900 px-4 pb-3 shadow-lg z-20 ",
         className
       )}
     >

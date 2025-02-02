@@ -94,10 +94,11 @@ const Feature = ({
   icon: React.ReactNode;
   index: number;
 }) => {
+  // Card component
   return (
     <div
       className={cn(
-        "flex flex-col h-full lg:border-r py-10 relative group/feature dark:border-neutral-800",
+        "flex flex-col h-full lg:border-r py-10 relative z-0 group/feature dark:border-neutral-800",
         (index === 0 || index === 4) && "lg:border-l dark:border-neutral-800",
         index < 4 && "lg:border-b dark:border-neutral-800"
       )}
@@ -116,12 +117,12 @@ const Feature = ({
           {title}
         </span>
       </div>
-      <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10 flex-grow">
+      <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-0 px-10 flex-grow">
         {description}
       </p>
 
       {/* Tombol menuju postingan */}
-      <div className="px-10 mt-6  flex justify-end">
+      <div className="px-10 mt-auto flex justify-end relative z-0">
         <a href={`/notes/${id}`} rel="noopener noreferrer">
           <Button className="bg-blue-600 text-white hover:bg-blue-500">
             View
