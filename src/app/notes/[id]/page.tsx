@@ -1,3 +1,5 @@
+"use client"; // Ensure the file is treated as a client-side component
+
 import { useState, useEffect } from "react";
 
 async function getPostData(id: string) {
@@ -13,7 +15,7 @@ async function getPostData(id: string) {
 }
 
 interface PageProps {
-  params: { id: string }; // Ensure it's a string
+  params: { id: string };
 }
 
 export default function PostPage({ params }: PageProps) {
