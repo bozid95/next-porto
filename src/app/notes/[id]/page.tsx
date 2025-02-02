@@ -1,40 +1,36 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 
-// Function to fetch post data
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
   const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts/${id}?key=${API_KEY}`;
 
   const res = await fetch(url, { cache: "no-store" });
-
   if (!res.ok) throw new Error("Failed to fetch data");
-
   return res.json();
 }
 
-// Correct PageProps definition
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function PostPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
   const [data, setData] = useState<{ title: string; content: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch post data when the id changes
   useEffect(() => {
-    if (params.id) {
-      getPostData(params.id)
+    if (unwrappedParams.id) {
+      getPostData(unwrappedParams.id)
         .then((data) => setData(data))
         .catch((error) => console.error("Error fetching post:", error))
         .finally(() => setLoading(false));
     }
-  }, [params.id]); // ✅ useEffect listens to changes in the id
+  }, [unwrappedParams.id]);
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
