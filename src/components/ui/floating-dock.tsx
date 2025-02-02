@@ -38,7 +38,7 @@ const FloatingDockMobile = ({
 }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className={cn("fixed bottom-4 right-4 md:hidden " , className)}>
+    <div className={cn("fixed bottom-4 right-4 md:hidden ", className)}>
       <AnimatePresence>
         {open && (
           <motion.div
@@ -58,7 +58,7 @@ const FloatingDockMobile = ({
                   },
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-                className="p-2 border border-purple-400 dark:border-purple-600 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow z-20"
+                className="border border-purple-900 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow z-20"
               >
                 <Link
                   href={item.href}
