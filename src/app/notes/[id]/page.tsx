@@ -26,6 +26,7 @@ export default function PostPage({ params }: PageProps) {
   const [data, setData] = useState<{ title: string; content: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Fetch post data when the id changes
   useEffect(() => {
     if (params.id) {
       getPostData(params.id)
@@ -33,7 +34,7 @@ export default function PostPage({ params }: PageProps) {
         .catch((error) => console.error("Error fetching post:", error))
         .finally(() => setLoading(false));
     }
-  }, [params.id]);
+  }, [params.id]); // ✅ useEffect listens to changes in the id
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
