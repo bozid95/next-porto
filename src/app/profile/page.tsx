@@ -31,7 +31,7 @@ export default function ProfilePage() {
 
   return ( <main className="max-w-3xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
    
-      <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
+      <h1 className="text-xl font-bold mb-1">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
         <div
           dangerouslySetInnerHTML={{ __html: data?.content || "" }}
