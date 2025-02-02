@@ -58,7 +58,7 @@ const FloatingDockMobile = ({
                   },
                 }}
                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
-                className="border border-purple-900 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow z-20"
+                className="border border-purple-900 rounded-full bg-white dark:bg-neutral-800 shadow-sm hover:shadow-md transition-shadow z-40"
               >
                 <Link
                   href={item.href}
