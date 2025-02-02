@@ -1,7 +1,8 @@
-"use client"; // Ensure the file is treated as a client-side component
+"use client";
 
 import { useState, useEffect } from "react";
 
+// Function to fetch post data
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
@@ -14,7 +15,7 @@ async function getPostData(id: string) {
   return res.json();
 }
 
-// Fix the PageProps type to match Next.js expectations
+// Correct PageProps definition
 interface PageProps {
   params: {
     id: string;
@@ -22,9 +23,7 @@ interface PageProps {
 }
 
 export default function PostPage({ params }: PageProps) {
-  const [data, setData] = useState<{ title: string; content: string } | null>(
-    null
-  );
+  const [data, setData] = useState<{ title: string; content: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
