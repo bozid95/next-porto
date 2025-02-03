@@ -70,7 +70,9 @@ export default function ProjectPage() {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
-      <h1 className="text-xl font-bold mb-1">Projects</h1>
+      <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+        Projects
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-0 py-4 max-w-7xl mx-auto">
         {features.map((feature, index) => (
           <Feature key={feature.id} {...feature} index={index} />

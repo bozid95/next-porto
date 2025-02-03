@@ -51,7 +51,9 @@ export default function BlogPage() {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-dark">
-      <h1 className="text-xl font-bold mb-1">Notes</h1>
+      <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+        Notes
+      </h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4">
         <ul className="space-y-6">
           {posts.length === 0 ? (
