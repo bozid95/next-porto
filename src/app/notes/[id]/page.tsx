@@ -62,6 +62,17 @@ export default function PostPage() {
         }
       }
 
+      if (node.nodeName === "TABLE") {
+        return (
+          <div key={index} className="overflow-x-auto my-4">
+            <table
+              className="min-w-full border border-gray-300 dark:border-neutral-700"
+              dangerouslySetInnerHTML={{ __html: (node as Element).innerHTML }}
+            />
+          </div>
+        );
+      }
+
       return (
         <div
           key={index}
