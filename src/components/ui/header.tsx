@@ -1,4 +1,5 @@
 import { ModeToggle } from "@/components/ui/darkmode";
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -10,7 +11,12 @@ export function Header() {
     >
       {/* Logo atau Judul */}
       <h1 className="text-lg md:text-xl font-semibold tracking-tight">
-        My Portfolio
+        <Link
+          href="/"
+          className="inline-block  text-blue-900 dark:text-blue-400 "
+        >
+          My Portfolio
+        </Link>
       </h1>
 
       {/* Toggle Mode */}

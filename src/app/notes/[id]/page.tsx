@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
@@ -37,8 +39,39 @@ export default function PostPage({ params }: PageProps) {
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
+  // 🔹 Fungsi untuk menangani kode dalam <pre><code>
+  const renderContent = (html: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    doc.querySelectorAll("pre code").forEach((codeBlock) => {
+      const language =
+        codeBlock.className.replace("language-", "") || "javascript";
+      const codeText = codeBlock.textContent || "";
+
+      const highlightedCode = (
+        <SyntaxHighlighter
+          language={language}
+          style={dracula}
+          className="rounded-md"
+        >
+          {codeText}
+        </SyntaxHighlighter>
+      );
+
+      const preElement = codeBlock.closest("pre");
+      if (preElement) {
+        preElement.replaceWith(document.createElement("div"));
+        preElement.innerHTML = ""; // Bersihkan elemen sebelum di-render ulang
+        preElement.appendChild(highlightedCode as unknown as Node);
+      }
+    });
+
+    return { __html: doc.body.innerHTML };
+  };
+
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white ">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
       <Link
         href="/notes"
         className="inline-block mb-4 text-blue-600 dark:text-blue-400 hover:underline"
@@ -48,8 +81,8 @@ export default function PostPage({ params }: PageProps) {
       <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
         <div
-          dangerouslySetInnerHTML={{ __html: data?.content || "" }}
-          className="prose dark:prose-invert"
+          dangerouslySetInnerHTML={renderContent(data?.content || "")}
+          className="prose dark:prose-invert max-w-full break-words overflow-wrap"
         />
       </div>
     </main>

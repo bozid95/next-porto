@@ -37,7 +37,7 @@ export default function ProfilePage() {
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
         <div
           dangerouslySetInnerHTML={{ __html: data?.content || "" }}
-          className="prose dark:prose-invert"
+          className="prose dark:prose-invert prose-a:text-blue-500 prose-a:underline hover:prose-a:text-blue-700"
         />
       </div>
     </main>
