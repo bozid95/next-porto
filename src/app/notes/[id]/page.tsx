@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useParams } from "next/navigation"; // ✅ Gunakan useParams dari Next.js
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
@@ -15,30 +16,26 @@ async function getPostData(id: string) {
   return res.json();
 }
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+export default function PostPage() {
+  const params = useParams(); // ✅ Ambil params dari Next.js
+  const postId = params.id as string; // ✅ Ensure params.id is a string
 
-export default function PostPage({ params }: PageProps) {
   const [data, setData] = useState<{ title: string; content: string } | null>(
     null
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (params.id) {
-      getPostData(params.id)
+    if (postId) {
+      getPostData(postId)
         .then((data) => setData(data))
         .catch((error) => console.error("Error fetching post:", error))
         .finally(() => setLoading(false));
     }
-  }, [params.id]);
+  }, [postId]);
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
-  // 🔹 Fungsi untuk parsing dan menampilkan kode dengan SyntaxHighlighter
   const renderContent = (html: string) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
@@ -56,7 +53,7 @@ export default function PostPage({ params }: PageProps) {
             <SyntaxHighlighter
               key={index}
               language={language}
-              style={dracula}
+              style={materialDark}
               className="rounded-md my-4"
             >
               {codeText}
@@ -64,8 +61,12 @@ export default function PostPage({ params }: PageProps) {
           );
         }
       }
+
       return (
-        <div key={index} dangerouslySetInnerHTML={{ __html: (node as Element).outerHTML }} />
+        <div
+          key={index}
+          dangerouslySetInnerHTML={{ __html: (node as Element).outerHTML }}
+        />
       );
     });
   };
