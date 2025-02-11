@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -16,58 +16,58 @@ async function getPostData(id: string) {
 }
 
 interface PageProps {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
 }
 
 export default function PostPage({ params }: PageProps) {
-  const unwrappedParams = use(params);
   const [data, setData] = useState<{ title: string; content: string } | null>(
     null
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (unwrappedParams.id) {
-      getPostData(unwrappedParams.id)
+    if (params.id) {
+      getPostData(params.id)
         .then((data) => setData(data))
         .catch((error) => console.error("Error fetching post:", error))
         .finally(() => setLoading(false));
     }
-  }, [unwrappedParams.id]);
+  }, [params.id]);
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
-  // 🔹 Fungsi untuk menangani kode dalam <pre><code>
+  // 🔹 Fungsi untuk parsing dan menampilkan kode dengan SyntaxHighlighter
   const renderContent = (html: string) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    doc.querySelectorAll("pre code").forEach((codeBlock) => {
-      const language =
-        codeBlock.className.replace("language-", "") || "javascript";
-      const codeText = codeBlock.textContent || "";
+    return Array.from(doc.body.childNodes).map((node, index) => {
+      if (node.nodeName === "PRE") {
+        const codeElement = (node as Element).querySelector("code");
+        if (codeElement) {
+          const languageClass = codeElement.className || "";
+          const language =
+            languageClass.replace("language-", "") || "javascript";
+          const codeText = codeElement.textContent || "";
 
-      const highlightedCode = (
-        <SyntaxHighlighter
-          language={language}
-          style={dracula}
-          className="rounded-md"
-        >
-          {codeText}
-        </SyntaxHighlighter>
-      );
-
-      const preElement = codeBlock.closest("pre");
-      if (preElement) {
-        preElement.replaceWith(document.createElement("div"));
-        preElement.innerHTML = ""; // Bersihkan elemen sebelum di-render ulang
-        preElement.appendChild(highlightedCode as unknown as Node);
+          return (
+            <SyntaxHighlighter
+              key={index}
+              language={language}
+              style={dracula}
+              className="rounded-md my-4"
+            >
+              {codeText}
+            </SyntaxHighlighter>
+          );
+        }
       }
+      return (
+        <div key={index} dangerouslySetInnerHTML={{ __html: (node as Element).outerHTML }} />
+      );
     });
-
-    return { __html: doc.body.innerHTML };
   };
 
   return (
@@ -80,10 +80,7 @@ export default function PostPage({ params }: PageProps) {
       </Link>
       <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
-        <div
-          dangerouslySetInnerHTML={renderContent(data?.content || "")}
-          className="prose dark:prose-invert max-w-full break-words overflow-wrap"
-        />
+        {renderContent(data?.content || "")}
       </div>
     </main>
   );
