@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation"; // ✅ Gunakan useParams dari Next.js
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
@@ -13,32 +16,74 @@ async function getPostData(id: string) {
   return res.json();
 }
 
-interface PageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
+export default function PostPage() {
+  const params = useParams(); // ✅ Ambil params dari Next.js
+  const postId = params.id as string; // ✅ Ensure params.id is a string
 
-export default function PostPage({ params }: PageProps) {
-  const unwrappedParams = use(params);
   const [data, setData] = useState<{ title: string; content: string } | null>(
     null
   );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (unwrappedParams.id) {
-      getPostData(unwrappedParams.id)
+    if (postId) {
+      getPostData(postId)
         .then((data) => setData(data))
         .catch((error) => console.error("Error fetching post:", error))
         .finally(() => setLoading(false));
     }
-  }, [unwrappedParams.id]);
+  }, [postId]);
 
   if (loading) return <p className="text-center">Loading Post...</p>;
 
+  const renderContent = (html: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    return Array.from(doc.body.childNodes).map((node, index) => {
+      if (node.nodeName === "PRE") {
+        const codeElement = (node as Element).querySelector("code");
+        if (codeElement) {
+          const languageClass = codeElement.className || "";
+          const language =
+            languageClass.replace("language-", "") || "javascript";
+          const codeText = codeElement.textContent || "";
+
+          return (
+            <SyntaxHighlighter
+              key={index}
+              language={language}
+              style={materialDark}
+              className="rounded-md my-4"
+            >
+              {codeText}
+            </SyntaxHighlighter>
+          );
+        }
+      }
+
+      if (node.nodeName === "TABLE") {
+        return (
+          <div key={index} className="overflow-x-auto my-4">
+            <table
+              className="min-w-full border border-gray-300 dark:border-neutral-700"
+              dangerouslySetInnerHTML={{ __html: (node as Element).innerHTML }}
+            />
+          </div>
+        );
+      }
+
+      return (
+        <div
+          key={index}
+          dangerouslySetInnerHTML={{ __html: (node as Element).outerHTML }}
+        />
+      );
+    });
+  };
+
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
       <Link
         href="/notes"
         className="inline-block mb-4 text-blue-600 dark:text-blue-400 hover:underline"
@@ -47,10 +92,7 @@ export default function PostPage({ params }: PageProps) {
       </Link>
       <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
-        <div
-          dangerouslySetInnerHTML={{ __html: data?.content || "" }}
-          className="prose dark:prose-invert"
-        />
+        {renderContent(data?.content || "")}
       </div>
     </main>
   );
