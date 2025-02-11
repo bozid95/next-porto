@@ -38,7 +38,7 @@ export default function PostPage({ params }: PageProps) {
   if (loading) return <p className="text-center">Loading Post...</p>;
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white ">
       <Link
         href="/notes"
         className="inline-block mb-4 text-blue-600 dark:text-blue-400 hover:underline"
