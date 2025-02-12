@@ -90,6 +90,7 @@ export default function PostPage() {
       >
         ← Back to Blog List
       </Link>
+      
       <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
         {renderContent(data?.content || "")}
