@@ -2,8 +2,6 @@ import Image from "next/image";
 import {
   IconBrandGithub,
   IconBrandLinkedin,
-  IconBrandYoutube,
-  IconBrandX,
   IconBrandInstagram,
   IconMapPin,
 } from "@tabler/icons-react";
