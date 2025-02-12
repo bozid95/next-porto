@@ -19,7 +19,7 @@ export default function ProfileCard() {
   return (
     <div className="relative w-full h-full">
       {/* Profile Card */}
-      <section className="relative flex flex-col md:flex-row items-center bg-gray-100 dark:bg-gray-900 p-6 rounded-xl shadow-lg">
+      <section className="relative flex flex-col md:flex-row items-center bg-gray-100 dark:bg-gray-900 rounded-xl shadow-lg">
         {/* Foto Profil */}
         <div className="w-24 h-24 md:w-32 md:h-32 overflow-hidden rounded-full">
           {loading ? (
@@ -36,7 +36,7 @@ export default function ProfileCard() {
         </div>
 
         {/* Informasi Profil */}
-        <div className="ml-6 text-center md:text-right w-full">
+        <div className=" text-center md:text-right w-full">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             {loading ? (
               <div className="w-40 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mx-auto md:mx-0" />
