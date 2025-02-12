@@ -51,7 +51,12 @@ export default function PostPage() {
         </div>
       ) : (
         <>
-          <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
+          <h1 className="text-2xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+            {data?.title}
+          </h1>
+          <h1 className="text-sm mb-5 bg-gradient-to-r from-slate-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+            Written by Widodo
+          </h1>
           <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">
             {renderContent(data?.content || "")}
           </div>
