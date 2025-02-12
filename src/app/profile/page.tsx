@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingIcon from "@/components/data/loading-icon";
 import { useState, useEffect } from "react";
 
 async function getProfileData() {
@@ -27,7 +28,7 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, []); // ✅ Fetch hanya dilakukan sekali saat komponen pertama kali dimuat
 
-  if (loading) return <p className="text-center">Loading Profile...</p>;
+  if (loading) return <LoadingIcon />;
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">

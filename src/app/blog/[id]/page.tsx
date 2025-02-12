@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation"; // ✅ Gunakan useParams dari Next.js
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import LoadingIcon from "@/components/data/loading-icon";
 
 async function getPostData(id: string) {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
@@ -34,7 +35,7 @@ export default function PostPage() {
     }
   }, [postId]);
 
-  if (loading) return <p className="text-center">Loading Post...</p>;
+  if (loading) return <LoadingIcon />;
 
   const renderContent = (html: string) => {
     const parser = new DOMParser();
@@ -85,10 +86,10 @@ export default function PostPage() {
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
       <Link
-        href="/notes"
+        href="/blog"
         className="inline-block mb-4 text-blue-600 dark:text-blue-400 hover:underline"
       >
-        ← Back to Blog List
+        ← Back
       </Link>
       <h1 className="text-xl font-bold mb-4">{data?.title}</h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4 md:pl-6">

@@ -22,11 +22,11 @@ export const linksMenu = [
     href: "/profile",
   },
   {
-    title: "Notes",
+    title: "Blog Post",
     icon: (
       <IconNotes className="h-full w-full text-neutral-500 dark:text-neutral-300" />
     ),
-    href: "/notes",
+    href: "/blog",
   },
   {
     title: "Projects",

@@ -1,5 +1,7 @@
 "use client"; // Pastikan berjalan di client
 
+import LoadingIcon from "@/components/data/loading-icon";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -13,6 +15,7 @@ type Post = {
 async function getPosts(): Promise<Post[]> {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
+  const urlImage = /https:\/\/blogger\.googleusercontent\.com\/img\/[^\s"]+/g;
 
   try {
     const res = await fetch(
@@ -24,6 +27,7 @@ async function getPosts(): Promise<Post[]> {
     }
 
     const data = await res.json();
+    console.log(data);
     return data.items ?? [];
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -47,12 +51,12 @@ export default function BlogPage() {
       });
   }, []);
 
-  if (loading) return <div className="text-center">Loading Notes...</div>;
+  if (loading) return <LoadingIcon />;
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-dark ">
       <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
-        Notes
+        Artikel
       </h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4">
         <ul className="space-y-6">
@@ -62,7 +66,7 @@ export default function BlogPage() {
             posts.map((post) => (
               <li key={post.id} className="border-b pb-4">
                 <Link
-                  href={`/notes/${post.id}`}
+                  href={`/blog/${post.id}`}
                   className="text-md text-blue-600 hover:underline"
                 >
                   {post.title}

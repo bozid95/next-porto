@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { IconTerminal2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import LoadingIcon from "@/components/data/loading-icon";
 
 // Buat interface untuk post dari API Blogger
 interface Post {
@@ -65,7 +66,7 @@ export default function ProjectPage() {
   }, []);
 
   if (loading) {
-    return <p className="text-center">Loading projects...</p>;
+    return <LoadingIcon />;
   }
 
   return (

@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        slowSpin: "spin 2s linear infinite",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
