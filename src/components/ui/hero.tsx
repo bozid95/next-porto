@@ -39,7 +39,7 @@ export default function ProfileCard() {
         <div className=" text-center md:text-right w-full">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             {loading ? (
-              <div className="w-40 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mx-auto md:mx-0" />
+              <span className="inline-block w-32 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mx-auto md:mx-0" />
             ) : (
               "Widodo"
             )}
