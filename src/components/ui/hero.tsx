@@ -12,7 +12,7 @@ export default function ProfileCard() {
 
   useEffect(() => {
     // Simulasi delay loading data (misalnya fetch dari API)
-    const timer = setTimeout(() => setLoading(false), 2000);
+    const timer = setTimeout(() => setLoading(false), 100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -75,7 +75,7 @@ export default function ProfileCard() {
                   <IconBrandGithub className="hover:text-black dark:hover:text-white" />
                 </a>
                 <a
-                  href="https://linkedin.com/widodo-id"
+                  href="https://linkedin.com/in/widodo-id"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
