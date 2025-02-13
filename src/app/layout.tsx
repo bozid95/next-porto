@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { linksMenu } from "@/components/data/menu";
 import { Header } from "@/components/ui/header";
+import Footer from "@/components/ui/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
           {children}
 
           <FloatingDock items={linksMenu} />
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

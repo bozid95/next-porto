@@ -11,46 +11,65 @@ type Post = {
   content: string;
 };
 
-// Fungsi untuk mengambil data posts dari API Blogger
-async function getPosts(): Promise<Post[]> {
+// Fungsi untuk mengambil data posts dari API Blogger dengan pagination
+async function getPosts(
+  pageToken = ""
+): Promise<{ posts: Post[]; nextPageToken?: string }> {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
+  const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article&maxResults=5${
+    pageToken ? `&pageToken=${pageToken}` : ""
+  }`;
 
   try {
-    const res = await fetch(
-      `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article`
-    );
+    const res = await fetch(url);
 
     if (!res.ok) {
       throw new Error("Failed to fetch posts");
     }
 
     const data = await res.json();
-    return data.items ?? [];
+    return {
+      posts: data.items ?? [],
+      nextPageToken: data.nextPageToken,
+    };
   } catch (error) {
     console.error("Error fetching posts:", error);
-    return [];
+    return { posts: [], nextPageToken: undefined };
   }
 }
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [nextPageToken, setNextPageToken] = useState<string | undefined>(
+    undefined
+  );
+  const [loadingMore, setLoadingMore] = useState(false);
 
+  // Load data pertama kali
   useEffect(() => {
-    getPosts()
-      .then((res) => {
-        setPosts(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching posts:", err);
-        setLoading(false);
-      });
+    getPosts().then(({ posts, nextPageToken }) => {
+      setPosts(posts);
+      setNextPageToken(nextPageToken);
+      setLoading(false);
+    });
   }, []);
 
+  // Load halaman berikutnya
+  const loadMore = () => {
+    if (!nextPageToken) return;
+
+    setLoadingMore(true);
+    getPosts(nextPageToken).then(({ posts: newPosts, nextPageToken }) => {
+      setPosts((prevPosts) => [...prevPosts, ...newPosts]); // Tambah post baru ke daftar yang ada
+      setNextPageToken(nextPageToken);
+      setLoadingMore(false);
+    });
+  };
+
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-dark ">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-dark">
       <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
         Notes
       </h1>
@@ -64,22 +83,39 @@ export default function BlogPage() {
             ))}
           </ul>
         ) : (
-          <ul className="space-y-6">
-            {posts.length === 0 ? (
-              <li className="text-center text-gray-500">No posts available</li>
-            ) : (
-              posts.map((post) => (
-                <li key={post.id} className="border-b pb-4">
-                  <Link
-                    href={`/notes/${post.id}`}
-                    className="text-md text-blue-600 hover:underline"
-                  >
-                    {post.title}
-                  </Link>
+          <>
+            <ul className="space-y-6">
+              {posts.length === 0 ? (
+                <li className="text-center text-gray-500">
+                  No posts available
                 </li>
-              ))
+              ) : (
+                posts.map((post) => (
+                  <li key={post.id} className="border-b pb-4">
+                    <Link
+                      href={`/notes/${post.id}`}
+                      className="text-md text-blue-600 hover:underline"
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))
+              )}
+            </ul>
+
+            {/* Tombol Load More */}
+            {nextPageToken && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                >
+                  {loadingMore ? "Loading..." : "Load More"}
+                </button>
+              </div>
             )}
-          </ul>
+          </>
         )}
       </div>
     </main>
