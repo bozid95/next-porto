@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "4.bp.blogspot.com",
-        port: "",
+        hostname: "blogger.googleusercontent.com",
       },
     ],
   },

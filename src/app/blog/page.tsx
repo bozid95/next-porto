@@ -1,6 +1,7 @@
 "use client"; // Pastikan berjalan di client
 
 import LoadingIcon from "@/components/data/loading-icon";
+import parse from "html-react-parser";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,43 +13,61 @@ type Post = {
   content: string;
 };
 
-async function getPosts(): Promise<Post[]> {
-  const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
-  const BLOG_ID = "2531488134356491737";
-  const urlImage = /https:\/\/blogger\.googleusercontent\.com\/img\/[^\s"]+/g;
-
-  try {
-    const res = await fetch(
-      `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article`
-    );
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch posts");
-    }
-
-    const data = await res.json();
-    console.log(data);
-    return data.items ?? [];
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return [];
-  }
-}
-
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  // Memperbaiki extractImageUrl agar berfungsi sesuai ekspektasi
+  const extractImageUrl = (urlImage: string) => {
+    const images: string[] = [];
+    parse(urlImage, {
+      replace: (domNode: any) => {
+        if (
+          domNode.name === "a" &&
+          domNode.attribs &&
+          domNode.attribs.href &&
+          domNode.attribs.href.startsWith(
+            "https://blogger.googleusercontent.com/img/"
+          )
+        ) {
+          images.push(domNode.attribs.href); // Pastikan menggunakan 'href' di sini
+        }
+      },
+    });
+    return images;
+  };
 
   useEffect(() => {
-    getPosts()
-      .then((res) => {
-        setPosts(res);
+    async function getPosts() {
+      const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
+      const BLOG_ID = "2531488134356491737";
+
+      try {
+        const res = await fetch(
+          `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article`
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch posts");
+        }
+
+        const data = await res.json();
+
+        setPosts(data.items);
+
+        // Pemetaan untuk ekstraksi URL gambar dari semua post
+        const allImageUrls = data.items.flatMap((post: any) =>
+          extractImageUrl(post.content)
+        );
+        setImageUrls(allImageUrls);
+
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching posts:", err);
-        setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    }
+    getPosts();
   }, []);
 
   if (loading) return <LoadingIcon />;
@@ -74,6 +93,19 @@ export default function BlogPage() {
               </li>
             ))
           )}
+
+          <div>
+            {imageUrls.map((url, index) => (
+              <div key={index}>
+                <Image
+                  src={url}
+                  alt={`Image ${index}`}
+                  width={500}
+                  height={300}
+                />
+              </div>
+            ))}
+          </div>
         </ul>
       </div>
     </main>
