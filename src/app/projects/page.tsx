@@ -34,10 +34,8 @@ async function getFeatureArticles(): Promise<
     const imageUrl = imgMatch ? imgMatch[1] : null;
 
     return {
-      id: post.id, // Tambahkan ID postingan
+      id: post.id,
       title: post.title,
-      //   description:
-      //     post.content.replace(/<[^>]*>/g, "").substring(0, 100) + "...",
       icon: imageUrl ? (
         <img
           src={imageUrl}
@@ -51,7 +49,6 @@ async function getFeatureArticles(): Promise<
   });
 }
 
-// Komponen utama
 export default function ProjectPage() {
   const [features, setFeatures] = useState<
     { id: string; title: string; description: string; icon: React.ReactNode }[]
@@ -71,19 +68,51 @@ export default function ProjectPage() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
-      <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
-        Projects
-      </h1>
+      {/* 🔹 Skeleton untuk Judul */}
+      {loading ? (
+        <div className="w-40 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mb-2" />
+      ) : (
+        <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+          Projects
+        </h1>
+      )}
+
+      {/* 🔹 Skeleton untuk Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-0 py-4 max-w-7xl mx-auto">
-        {features.map((feature, index) => (
-          <Feature key={feature.id} {...feature} index={index} />
-        ))}
+        {loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonFeature key={index} />
+            ))
+          : features.map((feature, index) => (
+              <Feature key={feature.id} {...feature} index={index} />
+            ))}
       </div>
     </main>
   );
 }
 
-// Komponen fitur individu
+// 🔹 Skeleton Card
+const SkeletonFeature = () => {
+  return (
+    <div className="flex flex-col h-full py-10 relative z-0 group/feature dark:border-neutral-800 animate-pulse">
+      <div className="mb-4 px-10">
+        <div className="w-full h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
+      </div>
+      <div className="text-lg font-bold mb-2 px-10">
+        <div className="w-32 h-5 bg-gray-300 dark:bg-gray-700 rounded-md" />
+      </div>
+      <div className="text-sm px-10 flex-grow">
+        <div className="w-full h-4 bg-gray-300 dark:bg-gray-700 rounded-md mb-2" />
+        <div className="w-3/4 h-4 bg-gray-300 dark:bg-gray-700 rounded-md" />
+      </div>
+      <div className="px-10 mt-auto">
+        <div className="w-16 h-8 bg-gray-300 dark:bg-gray-700 rounded-md" />
+      </div>
+    </div>
+  );
+};
+
+// 🔹 Komponen fitur individu
 const Feature = ({
   id,
   title,
@@ -97,7 +126,6 @@ const Feature = ({
   icon: React.ReactNode;
   index: number;
 }) => {
-  // Card component
   return (
     <div
       className={cn(
@@ -123,8 +151,6 @@ const Feature = ({
       <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-0 px-10 flex-grow">
         {description}
       </p>
-
-      {/* Tombol menuju postingan */}
       <div className="px-10 mt-auto flex justify-end relative z-0">
         <a href={`/notes/${id}`} rel="noopener noreferrer">
           <Button className="bg-blue-600 text-white hover:bg-blue-500">
