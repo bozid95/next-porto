@@ -13,8 +13,10 @@ type Post = {
 };
 
 const extractFirstImage = (htmlContent: string) => {
-  const imgMatch = htmlContent.match(/<img [^>]*src="([^"]+)"[^>]*>/);
-  return imgMatch ? imgMatch[1] : "/dummy.png";
+  const imgMatch = htmlContent.match(
+    /<a [^>]*href="(https:\/\/blogger\.googleusercontent\.com\/img\/[^"]+)"[^>]*>/
+  );
+  return imgMatch ? imgMatch[0] : "/dummy.png";
 };
 
 export default function BlogPage() {
@@ -23,26 +25,23 @@ export default function BlogPage() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   //Menampilkan gambar pada postingan
-
-  posts.forEach((post) => {
-    const postImage = extractFirstImage(post.content);
-    setImageUrls([postImage]);
-  });
-  console.log(imageUrls);
+  // extractFirstImage(imageUrls.content);
   useEffect(() => {
-    const fetchData = async () => {
+    async function getPosts() {
       const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
       const BLOG_ID = "2531488134356491737";
 
       try {
         const res = await fetch(
-          `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}`
+          "https://www.googleapis.com/blogger/v3/blogs/2531488134356491737/posts?key=AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE"
         );
         if (!res.ok) {
           throw new Error("Failed to load article");
         }
         const data = await res.json();
+        console.log(data);
         setPosts(data.items);
+        setImageUrls(data.items);
 
         // Pemetaan untuk ekstraksi URL gambar dari semua post
 
@@ -50,9 +49,9 @@ export default function BlogPage() {
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
-    };
-    fetchData();
-  }, [posts]);
+    }
+    getPosts();
+  }, []);
 
   if (loading) return <LoadingIcon />;
 
@@ -78,10 +77,6 @@ export default function BlogPage() {
             ))
           )}
         </ul>
-
-        {imageUrls.map((url, index) => (
-          <img src={url} alt="gambar" height={100} width={100} key={index} />
-        ))}
       </div>
     </main>
   );
