@@ -12,47 +12,46 @@ type Post = {
   content: string;
 };
 
-const extractFirstImage = (htmlContent: string) => {
-  const imgMatch = htmlContent.match(/<img [^>]*src="([^"]+)"[^>]*>/);
-  return imgMatch ? imgMatch[1] : "/dummy.png";
-};
+async function fetchData(): Promise<
+  { id: string; title: string; description: string; icon: React.ReactNode }[]
+> {
+  const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
+  const BLOG_ID = "2531488134356491737";
+
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) {
+      throw new Error("Failed to load article");
+    }
+    const data = await res.json();
+    return data.items.map((post: Post) => {
+      const imgMatch = post.content.match(
+        /<a [^>]*href="(https:\/\/blogger\.googleusercontent\.com\/img\/[^"]+)"[^>]*>/
+      );
+      const imageUrl = imgMatch ? imgMatch[1] : "/dummy.png";
+    });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+}
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-  //Menampilkan gambar pada postingan
+  // Menampilkan gambar pada postingan
 
-  posts.forEach((post) => {
-    const postImage = extractFirstImage(post.content);
-    setImageUrls([postImage]);
-  });
   console.log(imageUrls);
   useEffect(() => {
-    const fetchData = async () => {
-      const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
-      const BLOG_ID = "2531488134356491737";
-
-      try {
-        const res = await fetch(
-          `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}`
-        );
-        if (!res.ok) {
-          throw new Error("Failed to load article");
-        }
-        const data = await res.json();
-        setPosts(data.items);
-
-        // Pemetaan untuk ekstraksi URL gambar dari semua post
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
     fetchData();
-  }, [posts]);
+  }, []);
 
   if (loading) return <LoadingIcon />;
 
@@ -69,7 +68,7 @@ export default function BlogPage() {
             posts.map((post) => (
               <li key={post.id} className="border-b pb-4">
                 <Link
-                  href={`/blog/${post.id}`}
+                  href={`/note/${post.id}`}
                   className="text-md text-blue-600 hover:underline"
                 >
                   {post.title}

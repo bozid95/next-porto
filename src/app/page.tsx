@@ -1,6 +1,6 @@
 "use client";
 import ProfilePage from "./profile/page";
-import BlogPages from "./blog/page";
+import Note from "./note/page";
 import ProjectPage from "./projects/page";
 import HeroSection from "@/components/ui/hero";
 
@@ -10,7 +10,7 @@ export default function Home() {
       <HeroSection />
       <ProfilePage />
       <ProjectPage />
-      <BlogPages />
+      <Note />
     </div>
   );
 }
