@@ -37,7 +37,7 @@ export default function PostPage() {
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
       <Link
-        href="/note"
+        href="/notes"
         className="inline-block mb-4 text-blue-600 dark:text-blue-400 hover:underline"
       >
         ← Back

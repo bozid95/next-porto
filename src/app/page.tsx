@@ -1,6 +1,6 @@
 "use client";
 import ProfilePage from "./profile/page";
-import Note from "./note/page";
+import Note from "./notes/page";
 import ProjectPage from "./projects/page";
 import HeroSection from "@/components/ui/hero";
 
