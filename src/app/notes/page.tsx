@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 // Tipe data untuk post
 type Post = {
@@ -69,17 +70,18 @@ export default function BlogPage() {
   };
 
   return (
-    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-dark">
-      <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
+      <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-gray-900 via--900 bg-clip-text text-transparent">
         Notes
       </h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4">
         {loading ? (
-          <ul className="space-y-6">
+          <ul className="space-y-4">
             {[...Array(5)].map((_, index) => (
-              <li key={index} className="animate-pulse border-b pb-4">
-                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
-              </li>
+              <li
+                key={index}
+                className="animate-pulse bg-gray-300 dark:bg-gray-700 h-6 w-3/4 rounded-md"
+              ></li>
             ))}
           </ul>
         ) : (
@@ -91,14 +93,21 @@ export default function BlogPage() {
                 </li>
               ) : (
                 posts.map((post) => (
-                  <li key={post.id} className="border-b pb-4">
+                  <motion.li
+                    key={post.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  >
                     <Link
                       href={`/notes/${post.id}`}
-                      className="text-md text-blue-600 hover:underline"
+                      className="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-xl"
                     >
-                      {post.title}
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">
+                        {post.title}
+                      </h3>
                     </Link>
-                  </li>
+                  </motion.li>
                 ))
               )}
             </ul>
@@ -109,9 +118,13 @@ export default function BlogPage() {
                 <button
                   onClick={loadMore}
                   disabled={loadingMore}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-md transition-transform hover:scale-105 disabled:opacity-50"
                 >
-                  {loadingMore ? "Loading..." : "Load More"}
+                  {loadingMore ? (
+                    <span className="animate-pulse">Loading...</span>
+                  ) : (
+                    "Load More"
+                  )}
                 </button>
               </div>
             )}
