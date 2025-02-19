@@ -18,7 +18,7 @@ async function getPosts(
 ): Promise<{ posts: Post[]; nextPageToken?: string }> {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
-  const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article&maxResults=5${
+  const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article&maxResults=10${
     pageToken ? `&pageToken=${pageToken}` : ""
   }`;
 

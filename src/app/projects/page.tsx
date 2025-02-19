@@ -67,7 +67,7 @@ export default function ProjectPage() {
       {loading ? (
         <div className="w-40 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mb-2" />
       ) : (
-        <h1 className="text-xl font-bold mb-1 bg-gradient-to-r from-pink-500 to-blue-900 via-purple-900 bg-clip-text text-transparent">
+        <h1 className="text-xl font-normal mb-1 bg-gradient-to-r from-pink-500 to-slate-900 via-slate-900 bg-clip-text text-transparent">
           Projects
         </h1>
       )}
@@ -138,7 +138,7 @@ const Feature = ({
         {icon}
       </div>
       <div className="text-lg font-bold mb-2 relative z-0 px-10">
-        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-blue-500 transition-all duration-200 origin-center" />
+        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-gray-700 group-hover/feature:bg-blue-500 transition-all duration-200 origin-center" />
         <span className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100">
           {title}
         </span>
