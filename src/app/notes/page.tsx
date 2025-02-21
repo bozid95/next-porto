@@ -3,7 +3,7 @@
 import LoadingIcon from "@/components/data/loading-icon";
 import { IconTerminal2 } from "@tabler/icons-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useTheme } from "next-themes";
 
 import React, { useEffect, useState } from "react";
 
@@ -11,13 +11,23 @@ type Post = {
   id: string;
   title: string;
   content: string;
+  author: string[];
+  blog: string[];
+  published: string;
+  displayName: string;
 };
 
 async function fetchData(): Promise<
-  { id: string; title: string; description: string; image: React.ReactNode }[]
+  {
+    id: string;
+    title: string;
+    authorName: string;
+    description: string;
+    image: React.ReactNode;
+  }[]
 > {
-  const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
-  const BLOG_ID = "2531488134356491737";
+  const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE",
+    BLOG_ID = "2531488134356491737";
 
   const res = await fetch(
     `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}`,
@@ -40,14 +50,17 @@ async function fetchData(): Promise<
     return {
       id: post.id,
       title: post.title,
-      description: textContent.split(" ").slice(0, 50).join(" ") + "...",
+      tanggal: post.blog.published,
+      authorName: post.author.displayName,
+      description:
+        textContent.split(" ").slice(0, 50).join(" ") + "Baca Selengkapnya...",
       image: imageUrl ? (
-        <img
+        <Image
           src={imageUrl}
           alt={post.title}
           className="w-auto h-auto"
-          height={200}
-          width={100}
+          height={1200}
+          width={1200}
         />
       ) : (
         <IconTerminal2 className="w-10 h-10 text-gray-600 dark:text-gray-300" />
@@ -58,10 +71,18 @@ async function fetchData(): Promise<
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<
-    { id: string; title: string; description: string; image: React.ReactNode }[]
-  >([]);
-  const [loading, setLoading] = useState(true);
-
+      {
+        id: string;
+        title: string;
+        description: string;
+        authorName: string;
+        tanggal: string;
+        image: React.ReactNode;
+      }[]
+    >([]),
+    [loading, setLoading] = useState(true),
+    [mounted, setMounted] = useState(false),
+    { resolvedTheme } = useTheme();
   // Menampilkan gambar pada postingan
 
   useEffect(() => {
@@ -69,28 +90,57 @@ export default function BlogPage() {
       .then(setPosts)
       .catch((err) => console.error("Error load article", err))
       .finally(() => setLoading(false));
+
+    setMounted(true);
   }, []);
 
+  if (!mounted) {
+    return null;
+  }
   if (loading) return <LoadingIcon />;
+
+  function formatTanggal(tanggal: string) {
+    const date = new Date(tanggal);
+    const dd = String(date.getDate()).padStart(2, "0");
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const yy = String(date.getFullYear()).slice(2);
+
+    return `${dd}-${mm}-${yy}`;
+  }
 
   const ListBlog = ({
     id,
     title,
     description,
     image,
+    tanggal,
+    authorName,
   }: {
     id: string;
     title: string;
     description: string;
+    tanggal: string;
+    authorName: string;
     image: React.ReactNode;
   }) => {
     return (
-      <ul>
-        <li>
+      <ul className="space-y-6">
+        <li
+          className={`py-5 px-5 transition delay-50 ease-in ${
+            resolvedTheme === "dark"
+              ? "hover:bg-[#292929]"
+              : "hover:bg-[#f0f0f0]"
+          }   hover:border hover:rounded-lg`}
+        >
           <a href={`/notes/${id}`}>
-            <h1>{title}</h1>
-            <div>{image}</div>
-            <p>{description}</p>
+            <div className="flex justify-between flex-col">
+              <h1 className=" text-3xl">{title}</h1>
+              <p className="relative ">By: {authorName}</p>
+              <p>{tanggal}</p>
+            </div>
+
+            <div className="py-5">{image}</div>
+            <p className="py-2">{description}</p>
           </a>
         </li>
       </ul>
@@ -103,13 +153,11 @@ export default function BlogPage() {
         Artikel
       </h1>
       <div className="border-l-4 border-gray-300 dark:border-neutral-700 pl-4">
-        <ul className="space-y-6">
-          {posts.length === 0 ? (
-            <li className="text-center text-gray-500">No posts available</li>
-          ) : (
-            posts.map((post) => <ListBlog key={post.id} {...post} />)
-          )}
-        </ul>
+        {posts.length === 0 ? (
+          <li className="text-center text-gray-500">No posts available</li>
+        ) : (
+          posts.map((post) => <ListBlog key={post.id} {...post} />)
+        )}
       </div>
     </main>
   );
