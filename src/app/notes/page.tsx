@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Post = {
   id: string;
@@ -15,6 +16,7 @@ type Post = {
   blog: string[];
   published: string;
   displayName: string;
+  authorImage: string;
 };
 
 async function fetchData(): Promise<
@@ -22,6 +24,7 @@ async function fetchData(): Promise<
     id: string;
     title: string;
     authorName: string;
+    authorImage: string;
     description: string;
     image: React.ReactNode;
   }[]
@@ -49,11 +52,12 @@ async function fetchData(): Promise<
     const imageUrl = imgMatch ? imgMatch[1] : "/dummy.png";
     return {
       id: post.id,
+
       title: post.title,
-      tanggal: post.blog.published,
+      tanggal: post.published,
+      authorImage: post.author.image.url,
       authorName: post.author.displayName,
-      description:
-        textContent.split(" ").slice(0, 50).join(" ") + "Baca Selengkapnya...",
+      description: textContent.split(" ").slice(0, 50).join(" ") + "...",
       image: imageUrl ? (
         <Image
           src={imageUrl}
@@ -103,7 +107,7 @@ export default function BlogPage() {
     const date = new Date(tanggal);
     const dd = String(date.getDate()).padStart(2, "0");
     const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const yy = String(date.getFullYear()).slice(2);
+    const yy = String(date.getFullYear()).slice(0);
 
     return `${dd}-${mm}-${yy}`;
   }
@@ -132,16 +136,16 @@ export default function BlogPage() {
               : "hover:bg-[#f0f0f0]"
           }   hover:border hover:rounded-lg`}
         >
-          <a href={`/notes/${id}`}>
-            <div className="flex justify-between flex-col">
-              <h1 className=" text-3xl">{title}</h1>
+          <Link href={`/notes/${id}`}>
+            <h1 className=" text-3xl">{title}</h1>
+            <div className="flex items-baseline justify-between">
               <p className="relative ">By: {authorName}</p>
-              <p>{tanggal}</p>
+              <p className="">{formatTanggal(tanggal)}</p>
+              <span>{authorImage}</span>
             </div>
-
             <div className="py-5">{image}</div>
             <p className="py-2">{description}</p>
-          </a>
+          </Link>
         </li>
       </ul>
     );
