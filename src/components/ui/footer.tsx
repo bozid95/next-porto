@@ -9,7 +9,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white dark:bg-black shadow-md py-4">
+    <footer className="w-full max-w-5xl bg-white dark:bg-black shadow-md py-4 mx-auto">
       <div className="max-w-5xl w-full mx-auto px-6 flex flex-col items-center text-center md:flex-row md:justify-between md:text-left">
         {/* Copyright */}
         <p className="text-sm">
