@@ -12,20 +12,24 @@ type Post = {
   id: string;
   title: string;
   content: string;
-  author: string[];
-  blog: string[];
   published: string;
-  displayName: string;
-  authorImage: string;
+  author: {
+    image: {
+      url: string;
+    };
+    displayName: string;
+  };
+  blog: string[];
 };
 
 async function fetchData(): Promise<
   {
     id: string;
     title: string;
-    authorName: string;
-    authorImage: string;
     description: string;
+    authorName: string;
+    tanggal: string;
+    authorImage: string;
     image: React.ReactNode;
   }[]
 > {
@@ -79,6 +83,7 @@ export default function BlogPage() {
         id: string;
         title: string;
         description: string;
+        authorImage: string;
         authorName: string;
         tanggal: string;
         image: React.ReactNode;
@@ -119,11 +124,13 @@ export default function BlogPage() {
     image,
     tanggal,
     authorName,
+    authorImage,
   }: {
     id: string;
     title: string;
     description: string;
     tanggal: string;
+    authorImage: string;
     authorName: string;
     image: React.ReactNode;
   }) => {
@@ -139,9 +146,17 @@ export default function BlogPage() {
           <Link href={`/notes/${id}`}>
             <h1 className=" text-3xl">{title}</h1>
             <div className="flex items-baseline justify-between">
-              <p className="relative ">By: {authorName}</p>
+              <span className="flex items-baseline justify-center gap-2">
+                <p className="relative ">By: {authorName}</p>
+                <Image
+                  src={`https://${authorImage}`}
+                  alt={authorName}
+                  height={100}
+                  width={100}
+                  className="w-auto h-auto relative top-3.5 rounded-full"
+                />
+              </span>
               <p className="">{formatTanggal(tanggal)}</p>
-              <span>{authorImage}</span>
             </div>
             <div className="py-5">{image}</div>
             <p className="py-2">{description}</p>

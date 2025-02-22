@@ -1,6 +1,7 @@
 "use client";
 
 import LoadingIcon from "@/components/data/loading-icon";
+import HeroSection from "@/components/ui/hero";
 import { useState, useEffect } from "react";
 
 async function getProfileData() {
@@ -33,6 +34,8 @@ export default function ProfilePage() {
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 md:px-4 py-6 md:py-4 pt-4 md:pt-4 bg-white dark:bg-neutral-900 text-black dark:text-white">
       {/* 🔹 Skeleton untuk Judul */}
+
+      <HeroSection />
       {loading ? (
         <div className="w-40 h-6 bg-gray-300 dark:bg-gray-700 animate-pulse rounded-md mb-2" />
       ) : (
@@ -59,3 +62,5 @@ export default function ProfilePage() {
     </main>
   );
 }
+
+export function BothPage() {}

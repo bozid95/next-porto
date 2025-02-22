@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "blogger.googleusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "4.bp.blogspot.com",
+      },
     ],
   },
 };

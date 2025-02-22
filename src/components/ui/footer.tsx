@@ -9,18 +9,14 @@ import {
 
 export default function Footer() {
   return (
-    <footer
-      className="w-full max-w-5xl mx-auto px-6 py-4  bg-white
-      dark:bg-black shadow-md 
-      flex justify-between items-center"
-    >
-      <div className="max-w-5xl w-full mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-        {/* Copyright - Full ke kiri */}
-        <p className="text-sm text-left w-full">
+    <footer className="w-full max-w-5xl mx-auto px-6 py-4 bg-white dark:bg-black shadow-md">
+      <div className="max-w-5xl w-full mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+        {/* Copyright - Di tengah saat mobile, ke kiri saat desktop */}
+        <p className="text-sm w-full md:w-auto">
           © {new Date().getFullYear()} Widodo. All rights reserved.
         </p>
 
-        {/* Social Media - Tetap di kanan */}
+        {/* Social Media - Di tengah saat mobile, ke kanan saat desktop */}
         <div className="flex space-x-4 mt-4 md:mt-0">
           <Link
             href="https://github.com/bozid95"
