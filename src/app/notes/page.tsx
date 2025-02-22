@@ -1,4 +1,4 @@
-"use client"; // Pastikan berjalan di client
+"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
