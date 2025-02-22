@@ -48,7 +48,9 @@ async function fetchData(): Promise<
   }
   const data = await res.json();
   return data.items.map((post: Post) => {
-    const textContent = post.content.replace(/<[^>]+>/g, "");
+    const textContent = post.content
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ");
 
     const imgMatch = post.content.match(
       /<a [^>]*href="(https:\/\/blogger\.googleusercontent\.com\/img\/[^"]+)"[^>]*>/
