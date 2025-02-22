@@ -37,7 +37,7 @@ async function fetchData(): Promise<
     BLOG_ID = "2531488134356491737";
 
   const res = await fetch(
-    `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}`,
+    `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article`,
     {
       method: "GET",
       cache: "no-store",
