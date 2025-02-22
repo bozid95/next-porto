@@ -17,7 +17,7 @@ async function getPosts(
 ): Promise<{ posts: Post[]; nextPageToken?: string }> {
   const API_KEY = "AIzaSyC0NYs0vzrlklopzeDMW2mZvWTJ3z-y5iE";
   const BLOG_ID = "2531488134356491737";
-  const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article&maxResults=5${
+  const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${API_KEY}&labels=Article&maxResults=10${
     pageToken ? `&pageToken=${pageToken}` : ""
   }`;
 
@@ -91,7 +91,10 @@ export default function BlogPage() {
                 </li>
               ) : (
                 posts.map((post) => (
-                  <li key={post.id} className="border-b pb-4">
+                  <li
+                    key={post.id}
+                    className="border-b pb-4 transition-transform duration-200 hover:scale-[1.02] hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2"
+                  >
                     <Link
                       href={`/notes/${post.id}`}
                       className="text-md text-blue-600 hover:underline"
