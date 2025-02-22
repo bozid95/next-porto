@@ -62,5 +62,3 @@ export default function ProfilePage() {
     </main>
   );
 }
-
-export function BothPage() {}
